@@ -1,5 +1,4 @@
-import { Desktop } from "./Desktop";
-  // Import Desktop component
+import { Desktop } from "./Desktop"; // Import Desktop component
 
 function App() {
   return (

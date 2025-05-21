@@ -209,7 +209,7 @@
   display: inline-flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
   position: relative;
 }
 
@@ -217,7 +217,7 @@
   align-items: flex-start;
   display: inline-flex;
   flex: 0 0 auto;
-  gap: 30px;
+  gap: 25px;
   justify-content: center;
   position: relative;
 }
