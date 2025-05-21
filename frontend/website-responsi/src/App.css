@@ -1,0 +1,251 @@
+.desktop {
+  align-items: center;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  height: 950px;
+  justify-content: center;
+  padding: 0px 139px 96px;
+  position: relative;
+}
+
+.desktop .group {
+  height: 140.26px;
+  position: relative;
+  width: 674.09px;
+}
+
+.desktop .text-wrapper {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 35.6px;
+  font-weight: 700;
+  left: 181px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 31px;
+  width: 491px;
+}
+
+.desktop .headlogo {
+  height: 140px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 140px;
+}
+
+.desktop .div {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 41.6px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+  width: fit-content;
+}
+
+.desktop .frame {
+  align-items: flex-start;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 95px;
+  position: relative;
+}
+
+.desktop .overlap-group-wrapper {
+  height: 80px;
+  position: relative;
+  width: 87.98px;
+}
+
+.desktop .overlap-group {
+  background-color: #d9d9d9;
+  border-radius: 21.66px;
+  height: 86px;
+  position: relative;
+  width: 86px;
+}
+
+.desktop .text-wrapper-2 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 29px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-wrapper-3 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 29px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-wrapper-4 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 29px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-wrapper-5 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 29px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-wrapper-6 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 29px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .overlap-wrapper {
+  height: 85.98px;
+  margin-right: -2.00px;
+  position: relative;
+  width: 87.98px;
+}
+
+.desktop .text-wrapper-7 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 28px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-wrapper-8 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 28px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-wrapper-9 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 46.1px;
+  font-weight: 700;
+  height: 56px;
+  left: 28px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+}
+
+.desktop .text-urutan-menjawab {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 35.6px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+  width: fit-content;
+}
+
+
+.desktop .frame-2 {
+  align-items: flex-start;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 25px;
+  position: relative;
+}
+
+.desktop .frame-3 {
+  align-items: flex-start;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 30px;
+  justify-content: center;
+  position: relative;
+}
+
+.desktop .rectangle {
+  background-color: #d9d9d9;
+  border-radius: 11.69px;
+  height: 47.49px;
+  position: relative;
+  width: 47.49px;
+}
+
+.desktop .rectangle-2 {
+  background-color: #d9d9d9;
+  border-radius: 11.69px;
+  height: 47.49px;
+  position: relative;
+  width: 289.3px;
+}
+
+.desktop .maafin-ya-ges {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 19.9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+  width: fit-content;
+}
