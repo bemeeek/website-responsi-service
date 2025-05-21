@@ -1,7 +1,10 @@
 package main
 
 import (
+	"time"
 	"website-responsi/serial" // Pastikan path ini sesuai dengan struktur proyek Anda
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +33,16 @@ type PushButtonData struct {
 func main() {
 	// Inisialisasi router Gin
 	r := gin.Default()
+
+	// Tambahkan konfigurasi CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:8080"},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// Endpoint untuk mendapatkan data push button
 	r.GET("/responsi", func(c *gin.Context) {
