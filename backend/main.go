@@ -1,51 +1,62 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
 	"time"
 	"website-responsi/serial" // Pastikan path ini sesuai dengan struktur proyek Anda
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/rs/cors" // CORS middleware
 )
 
-var mockButtonData serial.PushButtonData
-
 func main() {
-	// Inisialisasi router Gin
-	r := gin.Default()
+	// Inisialisasi serial port
+	if err := serial.InitSerial(); err != nil {
+		log.Fatalf("Failed to initialize serial port: %v", err)
+	}
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // Pastikan frontend Anda ada di sini
-		AllowMethods:     []string{"GET", "POST"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
+	// Membuat mux untuk menangani route
+	mux := http.NewServeMux()
 
-	// Endpoint untuk mendapatkan data push button
-	r.GET("/responsi", func(c *gin.Context) {
-		c.JSON(200, mockButtonData)
-		// Membaca data dari Arduino melalui serial
-		//data, err := serial.ReadData()
-		//if err != nil {
-		//	c.JSON(500, gin.H{"error": err.Error()})
-		//	return
-		//}
-		//c.JSON(200, data)
-	})
-
-	r.POST("/mock", func(c *gin.Context) {
-		var data serial.PushButtonData
-		if err := c.ShouldBindJSON(&data); err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
+	// Endpoint untuk mendapatkan data dari serial
+	mux.HandleFunc("/responsi", func(w http.ResponseWriter, r *http.Request) {
+		// Membaca data dari port serial
+		data, err := serial.ReadData()
+		if err != nil {
+			// Log error yang lebih mendetail
+			log.Printf("Error reading data from serial: %v", err)
+			http.Error(w, fmt.Sprintf("Failed to read data from serial: %v", err), http.StatusInternalServerError)
 			return
 		}
-		mockButtonData = data
-		c.JSON(200, mockButtonData)
-		c.JSON(200, gin.H{"message": "Data mock berhasil diterima"})
+
+		// Log data yang diterima untuk debugging
+		log.Printf("Data received: %v", data)
+
+		// Mengirimkan data sebagai response JSON
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(data)
+		if err != nil {
+			// Log error encoding JSON
+			log.Printf("Error encoding data to JSON: %v", err)
+			http.Error(w, fmt.Sprintf("Failed to encode data to JSON: %v", err), http.StatusInternalServerError)
+		}
 	})
 
-	// Jalankan server di port 8080
-	r.Run(":3000")
+	// Menambahkan CORS middleware untuk mengizinkan akses dari frontend
+	handler := cors.Default().Handler(mux)
+
+	// Menjalankan server HTTP pada port 3000
+	server := &http.Server{
+		Addr:         ":3000",
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second, // Timeout pembacaan request
+		WriteTimeout: 10 * time.Second, // Timeout penulisan response
+	}
+
+	log.Println("Server berjalan pada http://localhost:3000")
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal("Server gagal dijalankan:", err)
+	}
 }

@@ -1,13 +1,16 @@
 package serial
 
 import (
+	"bufio"
+	"fmt"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/tarm/serial"
 )
 
-// Struktur untuk data yang diterima dari Arduino
 type PushButtonData struct {
 	X1 int `json:"x1"`
 	X2 int `json:"x2"`
@@ -29,53 +32,154 @@ type PushButtonData struct {
 	Y9 int `json:"y9"`
 }
 
-// Fungsi untuk membaca data dari Arduino melalui port serial
-func ReadData() (PushButtonData, error) {
-	// Konfigurasi port serial
+var (
+	port    *serial.Port
+	scanner *bufio.Scanner
+)
+
+// InitSerial membuka port serial dan mempersiapkan scanner untuk pembacaan data
+func InitSerial() error {
 	config := &serial.Config{
-		Name:     "COM3", // Gantilah dengan port serial yang sesuai
-		Baud:     9600,
-		Size:     8,
-		Parity:   serial.ParityNone, // Pastikan menggunakan serial.ParityNone
-		StopBits: 1,                 // Pastikan menggunakan 1 stop bit
+		Name:        "COM7",          // Gantilah dengan port yang sesuai
+		Baud:        500000,          // Sesuaikan dengan baud rate perangkat Anda
+		ReadTimeout: time.Second * 5, // Timeout pembacaan serial (5 detik)
 	}
 
-	// Membuka port serial
-	port, err := serial.OpenPort(config)
+	var err error
+	port, err = serial.OpenPort(config)
 	if err != nil {
-		log.Fatal(err)
-		return PushButtonData{}, err
+		log.Printf("Error opening serial port: %v", err) // Log jika ada masalah membuka port
+		return fmt.Errorf("failed to open serial port: %w", err)
 	}
 
-	// Membaca data dari port serial
-	buf := make([]byte, 128)
-	_, err = port.Read(buf)
-	if err != nil {
-		log.Fatal(err)
-		return PushButtonData{}, err
+	// Inisialisasi scanner untuk membaca data dari port serial
+	scanner = bufio.NewScanner(port)
+	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+		if atEOF && len(data) == 0 {
+			return 0, nil, nil
+		}
+		if i := strings.Index(string(data), "\n"); i >= 0 {
+			return i + 1, data[0:i], nil
+		}
+		return 0, nil, nil
+	})
+
+	log.Println("Serial port initialized successfully.")
+	return nil
+}
+
+// CloseSerial menutup port serial
+func CloseSerial() {
+	if port != nil {
+		port.Close()
+		log.Println("Serial port closed.")
+	}
+}
+
+// ReadData membaca data dari serial port dan memparsingnya ke dalam struct PushButtonData
+func ReadData() (PushButtonData, error) {
+	data := PushButtonData{}
+
+	// Membaca data dari scanner
+	if !scanner.Scan() {
+		log.Printf("Error reading from scanner: %v", scanner.Err()) // Log error pembacaan
+		return data, fmt.Errorf("scanner failed: %w", scanner.Err())
 	}
 
-	// Misalkan kita menerima data berupa "X1,X2,X3,...,Y1,Y2,Y3,..."
-	// Parsing data tersebut ke dalam struktur
-	data := PushButtonData{
-		X1: int(buf[0] - '0'),
-		X2: int(buf[1] - '0'),
-		X3: int(buf[2] - '0'),
-		X4: int(buf[3] - '0'),
-		X5: int(buf[4] - '0'),
-		X6: int(buf[5] - '0'),
-		X7: int(buf[6] - '0'),
-		X8: int(buf[7] - '0'),
-		X9: int(buf[8] - '0'),
-		Y1: int(time.Now().Unix()),
-		Y2: int(time.Now().Unix()),
-		Y3: int(time.Now().Unix()),
-		Y4: int(time.Now().Unix()),
-		Y5: int(time.Now().Unix()),
-		Y6: int(time.Now().Unix()),
-		Y7: int(time.Now().Unix()),
-		Y8: int(time.Now().Unix()),
-		Y9: int(time.Now().Unix()),
+	strData := strings.TrimSpace(scanner.Text())
+	log.Printf("Raw data received: %s", strData) // Debug logging untuk melihat data yang diterima
+
+	// Memecah data berdasarkan koma
+	parts := strings.Split(strData, ",")
+	log.Printf("Parsed data parts: %v", parts) // Log data yang diparsing
+
+	// Jika ada lebih dari 18 bagian, kita hanya ambil 18 bagian pertama
+	if len(parts) > 18 {
+		log.Printf("More than 18 parts, trimming extra: %v", parts[0:18])
+		parts = parts[:18]
+	}
+
+	// Jika ada kurang dari 18 bagian, kita kembalikan data default
+	if len(parts) != 18 {
+		log.Printf("Invalid data format, expected 18 parts, got %d: %v", len(parts), parts) // Log format yang salah
+		return data, fmt.Errorf("invalid data format, expected 18 parts, got %d: %v", len(parts), parts)
+	}
+
+	// Fungsi untuk parsing string ke integer
+	parseField := func(s string) (int, error) {
+		val, err := strconv.Atoi(strings.TrimSpace(s))
+		if err != nil {
+			log.Printf("Invalid number format: %v", err) // Log jika ada kesalahan format
+			return 0, fmt.Errorf("invalid number format: %w", err)
+		}
+		return val, nil
+	}
+
+	// Parsing nilai X (button states: 0, 1, 2, 3)
+	for i := 0; i < 9; i++ {
+		val, err := parseField(parts[i*2])
+		if err != nil {
+			log.Printf("Invalid X%d value: %v", i+1, err) // Log jika nilai X tidak valid
+			return data, fmt.Errorf("invalid X%d value: %w", i+1, err)
+		}
+		if val < 0 || val > 3 {
+			log.Printf("X%d value out of range (0-3): %d", i+1, val) // Log jika nilai X tidak valid
+			return data, fmt.Errorf("x%d value out of range (0-3): %d", i+1, val)
+		}
+
+		switch i {
+		case 0:
+			data.X1 = val
+		case 1:
+			data.X2 = val
+		case 2:
+			data.X3 = val
+		case 3:
+			data.X4 = val
+		case 4:
+			data.X5 = val
+		case 5:
+			data.X6 = val
+		case 6:
+			data.X7 = val
+		case 7:
+			data.X8 = val
+		case 8:
+			data.X9 = val
+		}
+	}
+
+	// Parsing nilai Y (waktu dalam ms)
+	for i := 0; i < 9; i++ {
+		val, err := parseField(parts[i*2+1])
+		if err != nil {
+			log.Printf("Invalid Y%d value: %v", i+1, err) // Log jika nilai Y tidak valid
+			return data, fmt.Errorf("invalid Y%d value: %w", i+1, err)
+		}
+		if val < 0 {
+			log.Printf("Y%d value cannot be negative: %d", i+1, val) // Log jika nilai Y negatif
+			return data, fmt.Errorf("y%d value cannot be negative: %d", i+1, val)
+		}
+		switch i {
+		case 0:
+			data.Y1 = val
+		case 1:
+			data.Y2 = val
+		case 2:
+			data.Y3 = val
+		case 3:
+			data.Y4 = val
+		case 4:
+			data.Y5 = val
+		case 5:
+			data.Y6 = val
+		case 6:
+			data.Y7 = val
+		case 7:
+			data.Y8 = val
+		case 8:
+			data.Y9 = val
+		}
 	}
 
 	return data, nil

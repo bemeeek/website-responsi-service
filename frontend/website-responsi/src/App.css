@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 35px;
   height: 1024px;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 56px 139px 96px;
   position: relative;
 }
@@ -41,7 +41,7 @@
 .desktop .div {
   color: #000000;
   font-family: "Inter-Bold", Helvetica;
-  font-size: 41.6px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: 0;
   line-height: normal;
@@ -197,6 +197,7 @@
   width: 289.3px;
 }
 
+
 .desktop .maafin-ya-ges {
   color: #000000;
   font-family: "Inter-Bold", Helvetica;
@@ -210,12 +211,37 @@
 }
 
 .desktop .button {
-  width: 120px;  /* Set the width */
-  height: 120px; /* Set the height to make it square */
+  width: 85px;  /* Set the width */
+  height: 85px; /* Set the height to make it square */
   display: flex;
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
   font-size: 10rem; /* Larger font size */
+}
+
+.desktop .button .text-button {
+  color: #222222;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 50px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+  width: fit-content;
+}
+
+.desktop .text-urutan-menjawab {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 19.9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+  width: fit-content;
 }
 
 .desktop .text-wrapper {
