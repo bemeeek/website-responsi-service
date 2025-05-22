@@ -211,8 +211,8 @@
 }
 
 .desktop .button {
-  width: 85px;  /* Set the width */
-  height: 85px; /* Set the height to make it square */
+  width: 100px;  /* Set the width */
+  height: 100px; /* Set the height to make it square */
   display: flex;
   border-radius: 20px;
   justify-content: center;

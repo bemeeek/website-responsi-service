@@ -19,12 +19,24 @@ var scanner *bufio.Scanner
 
 // Struktur data tombol yang akan diparse
 type PushButtonData struct {
-	X1 int `json:"x1"` // Nomor tombol yang ditekan pertama (urutan x=1)
-	Y1 int `json:"y1"`
-	X2 int `json:"x2"` // Nomor tombol yang ditekan kedua (urutan x=2)
-	Y2 int `json:"y2"`
-	X3 int `json:"x3"` // Nomor tombol yang ditekan ketiga (urutan x=3)
-	Y3 int `json:"y3"`
+	X1 int `json:"X1"` // Nomor tombol yang ditekan pertama (urutan x=1)
+	Y1 int `json:"Y1"`
+	X2 int `json:"X2"` // Nomor tombol yang ditekan kedua (urutan x=2)
+	Y2 int `json:"Y2"`
+	X3 int `json:"X3"` // Nomor tombol yang ditekan ketiga (urutan x=3)
+	Y3 int `json:"Y3"`
+	X4 int `json:"X4"` // Nomor tombol yang ditekan keempat (urutan x=4)
+	Y4 int `json:"Y4"`
+	X5 int `json:"X5"` // Nomor tombol yang ditekan kelima (urutan x=5)
+	Y5 int `json:"Y5"`
+	X6 int `json:"X6"` // Nomor tombol yang ditekan keenam (urutan x=6)
+	Y6 int `json:"Y6"`
+	X7 int `json:"X7"` // Nomor tombol yang ditekan ketujuh (urutan x=7)
+	Y7 int `json:"Y7"`
+	X8 int `json:"X8"` // Nomor tombol yang ditekan kedelapan (urutan x=8)
+	Y8 int `json:"Y8"`
+	X9 int `json:"X9"` // Nomor tombol yang ditekan kesembilan (urutan x=9)
+	Y9 int `json:"Y9"`
 }
 
 // Fungsi untuk inisialisasi serial
@@ -113,6 +125,24 @@ func ReadData() (PushButtonData, error) {
 				case 3:
 					data.X3 = buttonNumber
 					data.Y3 = y
+				case 4:
+					data.X4 = buttonNumber
+					data.Y4 = y
+				case 5:
+					data.X5 = buttonNumber
+					data.Y5 = y
+				case 6:
+					data.X6 = buttonNumber
+					data.Y6 = y
+				case 7:
+					data.X7 = buttonNumber
+					data.Y7 = y
+				case 8:
+					data.X8 = buttonNumber
+					data.Y8 = y
+				case 9:
+					data.X9 = buttonNumber
+					data.Y9 = y
 				}
 			}
 
